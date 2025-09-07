@@ -78,7 +78,7 @@ class Client
      *
      * @return Json
      */
-    public function request($method, $path, $params = [])
+    public function request($method, $path, $params = [], $headers = [])
     {
 
         if (!$this->_http_client) {
@@ -88,13 +88,10 @@ class Client
         $data = [
             'headers' => [
                 'Authorization' => "Bearer $this->_token",
-                'Content-Type' => "application/json"
+                'Content-Type' => "application/json",
+                ...$headers
             ]
         ];
-
-        if ($method == "PATCH") {
-            $data["headers"]["Content-Type"] = "application/merge-patch+json";
-        }
 
         if ((in_array($method, ["POST", "PUT", "PATCH"]))  && count($params) > 0) {
             $data["json"] = $params;
